@@ -1,4 +1,4 @@
-package com.example.iqmap
+package io.github.laith343.iqmap
 
 import io.flutter.embedding.android.FlutterActivity
 
