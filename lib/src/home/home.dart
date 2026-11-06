@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iqmap/view/home/src/MapWidget.dart';
+import 'package:iqmap/src/home/widgets/map_widget.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
