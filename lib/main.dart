@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:iqmap/src/home/home.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:iqmap/src/app.dart';
 
 void main() {
-  runApp(const MaterialApp(
-    home: HomeView(),
-  ));
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ProviderScope(child: App()));
 }
