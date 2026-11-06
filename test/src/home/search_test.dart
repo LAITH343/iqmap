@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iqmap/src/home/controllers/search_items.dart';
-import 'package:iqmap/src/home/controllers/search_notifier.dart';
+import 'package:iqmap/src/home/domain/entities/search_items.dart';
+import 'package:iqmap/src/home/presentation/controllers/location_search_controller.dart';
 import 'package:iqmap/src/home/domain/entities/coordinates.dart';
-import 'package:iqmap/src/home/widgets/search_for_locations.dart';
+import 'package:iqmap/src/home/presentation/widgets/search_for_locations.dart';
 
 const _erbil = SearchItems(
   labelAr: 'أربيل',
@@ -22,20 +22,20 @@ final _overrides = [
 ];
 
 void main() {
-  group('SearchNotifier', () {
+  group('LocationSearchController', () {
     late ProviderContainer container;
-    late SearchNotifier notifier;
+    late LocationSearchController notifier;
 
     setUp(() {
       container = ProviderContainer.test(overrides: _overrides);
-      // searchProvider is autoDispose, so it needs a listener to stay alive.
-      container.listen(searchProvider, (_, _) {});
-      notifier = container.read(searchProvider.notifier);
+      // locationSearchControllerProvider is autoDispose, so it needs a listener to stay alive.
+      container.listen(locationSearchControllerProvider, (_, _) {});
+      notifier = container.read(locationSearchControllerProvider.notifier);
     });
 
     List<SearchItems> search(String query) {
       notifier.onQueryChanged(query);
-      return container.read(searchProvider).items;
+      return container.read(locationSearchControllerProvider).items;
     }
 
     test('matches English case-insensitively', () {
@@ -49,45 +49,56 @@ void main() {
 
     test('a blank query has no results and no empty state', () {
       expect(search('   '), isEmpty);
-      expect(container.read(searchProvider).showNoResults, isFalse);
+      expect(
+        container.read(locationSearchControllerProvider).showNoResults,
+        isFalse,
+      );
     });
 
     test('an unmatched query shows the empty state', () {
       expect(search('zzz'), isEmpty);
-      expect(container.read(searchProvider).showNoResults, isTrue);
+      expect(
+        container.read(locationSearchControllerProvider).showNoResults,
+        isTrue,
+      );
     });
 
     test('selecting closes results and reopening uses the shown text', () {
       search('erb');
       notifier.select(_erbil, query: 'Erbil');
 
-      var state = container.read(searchProvider);
+      var state = container.read(locationSearchControllerProvider);
       expect(state.selected, _erbil);
       expect(state.hasResults, isFalse);
       expect(state.showNoResults, isFalse);
 
       notifier.showResults();
-      state = container.read(searchProvider);
+      state = container.read(locationSearchControllerProvider);
       expect(state.items, [_erbil]);
     });
 
     test('re-selecting the same place produces a new selectionId', () {
       notifier.select(_erbil, query: 'Erbil');
-      final first = container.read(searchProvider).selectionId;
+      final first = container
+          .read(locationSearchControllerProvider)
+          .selectionId;
       notifier.select(_erbil, query: 'Erbil');
-      expect(container.read(searchProvider).selectionId, isNot(first));
+      expect(
+        container.read(locationSearchControllerProvider).selectionId,
+        isNot(first),
+      );
     });
 
     test('hiding results keeps the selection', () {
       notifier.select(_erbil, query: 'Erbil');
       notifier.hideResults();
-      expect(container.read(searchProvider).selected, _erbil);
+      expect(container.read(locationSearchControllerProvider).selected, _erbil);
     });
 
     test('emptying the field drops the selection', () {
       notifier.select(_erbil, query: 'Erbil');
       notifier.onQueryChanged('');
-      expect(container.read(searchProvider).selected, isNull);
+      expect(container.read(locationSearchControllerProvider).selected, isNull);
     });
   });
 
@@ -112,7 +123,7 @@ void main() {
       await tester.tap(find.byType(ListTile));
       await tester.pump();
 
-      expect(container.read(searchProvider).selected, _basra);
+      expect(container.read(locationSearchControllerProvider).selected, _basra);
       expect(find.byType(ListTile), findsNothing);
       expect(find.widgetWithText(TextField, 'Basra'), findsOneWidget);
     });
@@ -124,7 +135,7 @@ void main() {
       await tester.testTextInput.receiveAction(TextInputAction.search);
       await tester.pump();
 
-      expect(container.read(searchProvider).selected, _erbil);
+      expect(container.read(locationSearchControllerProvider).selected, _erbil);
     });
 
     testWidgets('shows a message when nothing matches', (tester) async {
@@ -144,7 +155,7 @@ void main() {
       await tester.tap(find.byIcon(Icons.close));
       await tester.pump();
 
-      expect(container.read(searchProvider).query, isEmpty);
+      expect(container.read(locationSearchControllerProvider).query, isEmpty);
       expect(find.byType(ListTile), findsNothing);
       expect(find.byIcon(Icons.close), findsNothing);
     });

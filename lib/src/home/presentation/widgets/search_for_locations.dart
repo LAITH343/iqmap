@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:iqmap/src/home/controllers/search_items.dart';
-import 'package:iqmap/src/home/controllers/search_notifier.dart';
+import 'package:iqmap/src/home/domain/entities/search_items.dart';
+import 'package:iqmap/src/home/presentation/controllers/location_search_controller.dart';
 
 class SearchForLocations extends ConsumerStatefulWidget {
   const SearchForLocations({super.key});
@@ -31,23 +31,25 @@ class _SearchForLocationsState extends ConsumerState<SearchForLocations> {
   void _onSelect(SearchItems item) {
     _searchController.text = item.labelEn;
     _searchFocusNode.unfocus();
-    ref.read(searchProvider.notifier).select(item, query: item.labelEn);
+    ref
+        .read(locationSearchControllerProvider.notifier)
+        .select(item, query: item.labelEn);
   }
 
   void _onSubmitted(String _) {
-    final items = ref.read(searchProvider).items;
+    final items = ref.read(locationSearchControllerProvider).items;
     if (items.isNotEmpty) _onSelect(items.first);
   }
 
   void _onClear() {
     _searchController.clear();
-    ref.read(searchProvider.notifier).clear();
+    ref.read(locationSearchControllerProvider.notifier).clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    final search = ref.watch(searchProvider);
-    final notifier = ref.read(searchProvider.notifier);
+    final search = ref.watch(locationSearchControllerProvider);
+    final notifier = ref.read(locationSearchControllerProvider.notifier);
 
     return Column(
       mainAxisSize: MainAxisSize.min,

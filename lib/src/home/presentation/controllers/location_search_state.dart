@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:iqmap/src/home/controllers/search_items.dart';
+import 'package:iqmap/src/home/domain/entities/search_items.dart';
 
 @immutable
-final class const SearchState({
+final class const LocationSearchState({
   final String query = '',
   final List<SearchItems> items = const [],
   final SearchItems? selected,
@@ -15,13 +15,13 @@ final class const SearchState({
 
   bool get showNoResults => isOpen && query.trim().isNotEmpty && items.isEmpty;
 
-  SearchState copyWith({
+  LocationSearchState copyWith({
     String? query,
     List<SearchItems>? items,
     SearchItems? Function()? selected,
     bool? isOpen,
     int? selectionId,
-  }) => SearchState(
+  }) => LocationSearchState(
     query: query ?? this.query,
     items: items ?? this.items,
     selected: selected != null ? selected() : this.selected,

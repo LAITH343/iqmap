@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iqmap/src/home/home.dart';
+import 'package:iqmap/src/home/presentation/home_view.dart';
 
 class App extends StatelessWidget {
   const new({super.key});

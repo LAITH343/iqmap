@@ -1,4 +1,4 @@
-import 'package:iqmap/src/home/controllers/search_items.dart';
+import 'package:iqmap/src/home/domain/entities/search_items.dart';
 import 'package:iqmap/src/home/domain/entities/coordinates.dart';
 
 /// Bundled search data. Coordinates are approximate city/district centers.

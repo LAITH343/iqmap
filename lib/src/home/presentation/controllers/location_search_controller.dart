@@ -1,20 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iqmap/src/home/controllers/search_items.dart';
-import 'package:iqmap/src/home/controllers/search_state.dart';
+import 'package:iqmap/src/home/domain/entities/search_items.dart';
+import 'package:iqmap/src/home/presentation/controllers/location_search_state.dart';
 import 'package:iqmap/src/home/data/iraq_locations.dart';
 
 final locationProvider = Provider<List<SearchItems>>((ref) => iraqLocations);
 
-final searchProvider =
-    NotifierProvider.autoDispose<SearchNotifier, SearchState>(
-      SearchNotifier.new,
+final locationSearchControllerProvider =
+    NotifierProvider.autoDispose<LocationSearchController, LocationSearchState>(
+      LocationSearchController.new,
     );
 
-class SearchNotifier extends Notifier<SearchState> {
+class LocationSearchController extends Notifier<LocationSearchState> {
   @override
-  SearchState build() {
+  LocationSearchState build() {
     ref.watch(locationProvider);
-    return const SearchState();
+    return const LocationSearchState();
   }
 
   void onQueryChanged(String value) {
@@ -45,7 +45,7 @@ class SearchNotifier extends Notifier<SearchState> {
   }
 
   void clear() {
-    state = const SearchState();
+    state = const LocationSearchState();
   }
 
   List<SearchItems> _filter(String query) {
