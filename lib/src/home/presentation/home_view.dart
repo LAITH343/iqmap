@@ -4,6 +4,7 @@ import 'package:iqmap/src/home/presentation/controllers/location_providers.dart'
 import 'package:iqmap/src/home/presentation/controllers/tracking_controller.dart';
 import 'package:iqmap/src/home/presentation/widgets/location_error_snackbar.dart';
 import 'package:iqmap/src/home/presentation/widgets/map_widget.dart';
+import 'package:iqmap/src/home/presentation/widgets/search_for_locations.dart';
 import 'package:iqmap/src/home/presentation/widgets/user_location_button.dart';
 
 class HomeView extends ConsumerWidget {
@@ -35,7 +36,18 @@ class HomeView extends ConsumerWidget {
     });
 
     return const Scaffold(
-      body: Stack(children: [MapWidget(), UserLocationButton()]),
+      body: Stack(
+        children: [
+          Positioned.fill(child: MapWidget()),
+          UserLocationButton(),
+          Positioned(
+            top: 0,
+            left: 16,
+            right: 16,
+            child: SafeArea(child: SearchForLocations()),
+          ),
+        ],
+      ),
     );
   }
 }
