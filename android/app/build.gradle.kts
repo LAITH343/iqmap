@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "io.github.laith343.iqmap"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
